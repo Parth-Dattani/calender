@@ -241,6 +241,7 @@ class _SyncfusionCalState extends State<SyncfusionCal> {
                 // weekNumberStyle: WeekNumberStyle(
                 //   backgroundColor: Colors.green
                 // ),
+                headerDateFormat: Intl.defaultLocale,
 
                 monthViewSettings: const MonthViewSettings(
                     showTrailingAndLeadingDates: false,

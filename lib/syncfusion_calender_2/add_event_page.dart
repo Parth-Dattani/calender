@@ -1,4 +1,7 @@
-import 'package:calender/syncfusion_calender/meetting.dart';
+
+import 'dart:math';
+
+import 'package:calender/utils.dart';
 import 'package:flutter/material.dart';
 
 class AddEventPage extends StatefulWidget {
@@ -21,7 +24,7 @@ class _AddEventPageState extends State<AddEventPage> {
   void initState() {
     super.initState();
 
-    if(widget.event == null){
+    if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(const Duration(hours: 2));
     }
@@ -36,20 +39,24 @@ class _AddEventPageState extends State<AddEventPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(title: const Text("Add/Edit"),
         actions: [
-          IconButton(onPressed: (){
+          IconButton(onPressed: () {
             Navigator.of(context).pop();
           }, icon: const Icon(Icons.clear)),
-          IconButton(onPressed: (){
-            if(_formKey.currentState!.validate()){
+          IconButton(onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Processing Data')),
+              );
+              print(titleController.text);
+              print(descController.text);
+              print(toDate);
             }
-            else{
+            else {
               print("not");
             }
-
           }, icon: const Icon(Icons.save)),
         ],
       ),
@@ -60,18 +67,23 @@ class _AddEventPageState extends State<AddEventPage> {
             child: Form(
               key: _formKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextFormField(
                     controller: titleController,
                     decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                      hintText: 'enter title'
+                        border: UnderlineInputBorder(),
+                        hintText: 'enter title'
                     ),
-                    onFieldSubmitted: (_){
-                    },
-                    validator: (title){
-                       title!.isEmpty ? "title cannot Empty" : null;
+                    onFieldSubmitted: (_) {},
+                    validator: (title) {
+                      if (title == null || title.isEmpty) {
+                        return "title cannot Empty";
+                      }
+                      else {
+                        return null;
+                      }
                     },
                   ),
                   const SizedBox(height: 10,),
@@ -81,10 +93,51 @@ class _AddEventPageState extends State<AddEventPage> {
                         border: UnderlineInputBorder(),
                         hintText: 'enter description'
                     ),
-                    onFieldSubmitted: (_){},
-                    validator: (desc){
-                      desc != null && desc.isEmpty ? "description cannot be Empty" : null;
+                    onFieldSubmitted: (_) {},
+                    validator: (desc) {
+                      if (desc == null || desc.isEmpty) {
+                        return "description cannot be Empty";
+                      }
+                      else {
+                        null;
+                      }
                     },
+                  ),
+
+                  const SizedBox(height: 20,),
+                  const Text("from date Time", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex: 2,
+                          child: dropDown(text: Utils.toDate(fromDate),
+                              onClick: () {
+                            pickFromDateTime(pickDate: true);
+                              })),
+                      Expanded(child: dropDown(text: Utils.toTime(fromDate),
+                          onClick: () {
+                        pickFromDateTime(pickDate: false);
+                          }))
+                    ],
+                  ),
+
+                  const SizedBox(height: 10,),
+                  Text("to date Time",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex: 2,
+                          child: dropDown(text: Utils.toDate(toDate),
+                              onClick: () {
+                                pickFromDateTime(pickDate: true);
+                              })),
+                      Expanded(child: dropDown(text: Utils.toTime(toDate),
+                          onClick: () {
+                        pickFromDateTime(pickDate: true);
+                        print(toDate);
+                          }))
+                    ],
                   ),
                 ],
               ),
@@ -94,4 +147,66 @@ class _AddEventPageState extends State<AddEventPage> {
       ),
     );
   }
+
+
+  Future pickFromDateTime({
+    required bool pickDate
+  }) async {
+    final date = await pickDateTime(fromDate, pickDate: pickDate);
+    if(date == null) return ;
+    setState(() {
+      date;
+      print("change date ${date}");
+    });
+  }
+
+  Future<DateTime?> pickDateTime(
+      DateTime initialDate, {
+    required bool pickDate,
+    DateTime? firstDate
+  }) async {
+    if (pickDate) {
+      final date = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: firstDate?? DateTime(2022,12),
+          lastDate: DateTime(2024));
+
+      if(date == null)
+        {
+          //return null;
+          print("ssss:${date}");
+        }
+      else {
+        //print("date: ${date}");
+        final timeOfDay = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay.fromDateTime(initialDate));
+
+        if (timeOfDay == null) return null;
+        final date = DateTime(
+            initialDate.hour, initialDate.minute, initialDate.second);
+
+
+        final time = Duration(
+            hours: timeOfDay.hour,
+            minutes: timeOfDay.minute,
+        );
+
+        return date.add(time);
+      }
+    }
+  }
+
+  Widget dropDown({
+    required String text,
+    required VoidCallback onClick,
+  }) =>
+      ListTile(
+        title: Text(text),
+        trailing: Icon(Icons.arrow_drop_down),
+        onTap: onClick,
+      );
+
+
 }

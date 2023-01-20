@@ -3,6 +3,7 @@
 
 import 'dart:collection';
 
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /// Example event class.
@@ -28,7 +29,7 @@ final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
     value: (item) => List.generate(
         item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
   ..addAll({
-    kToday: [
+    today: [
       Event('Today\'s Event 1'),
       Event('Today\'s Event 2'),
     ],
@@ -43,10 +44,32 @@ List<DateTime> daysInRange(DateTime first, DateTime last) {
   final dayCount = last.difference(first).inDays + 1;
   return List.generate(
     dayCount,
-        (index) => DateTime.utc(first.year, first.month, first.day + index),
+    (index) => DateTime.utc(first.year, first.month, first.day + index),
   );
 }
 
-final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+final today = DateTime.now();
+final kFirstDay = DateTime(today.year, today.month - 3, today.day);
+final kLastDay = DateTime(today.year, today.month + 3, today.day);
+
+class Utils {
+  static String toDateTime(DateTime dateTime) {
+    final date = DateFormat.yMMMEd().format(dateTime);
+    final time = DateFormat.Hm().format(dateTime);
+    return '$date $time';
+  }
+
+  static String toDate(DateTime dateTime) {
+    final date = DateFormat.yMMMEd().format(dateTime);
+    return '$date';
+  }
+
+  static String toTime(DateTime dateTime) {
+    final time = DateFormat.Hm().format(dateTime);
+    return '$time';
+  }
+
+  static DateTime removeTime(DateTime dateTime) =>
+    DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+}
