@@ -60,7 +60,6 @@ class _TableEventCalenderState extends State<TableEventCalender> {
             children: [
               TableCalendar(
                 locale: 'en_US',
-
                 focusedDay: _focusDay,
                 firstDay: DateTime(2023),
                 lastDay: DateTime(2025),
