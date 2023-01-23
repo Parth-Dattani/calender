@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'meetting.dart';
+import 'meetting2.dart';
 
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source){
+class MeetingDataSource2 extends CalendarDataSource {
+  MeetingDataSource2(List<Meeting2> source){
     appointments = source;
   }
 
@@ -34,10 +34,10 @@ class MeetingDataSource extends CalendarDataSource {
     return appointments![index].isAllDay;
   }
 
-  Meeting _getMeetingData(int index) {
+  Meeting2 _getMeetingData(int index) {
     final dynamic meeting = appointments![index];
-    late final Meeting meetingData;
-    if (meeting is Meeting) {
+    late final Meeting2 meetingData;
+    if (meeting is Meeting2) {
       meetingData = meeting;
     }
 

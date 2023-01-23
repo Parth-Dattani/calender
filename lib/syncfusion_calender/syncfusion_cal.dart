@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:calender/syncfusion_calender_2/add_event_page.dart';
+import 'package:calender/syncfusion_calender_2/add_event_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -278,7 +278,7 @@ class _SyncfusionCalState extends State<SyncfusionCal> {
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            const AddEventPage()
+            const AddEventPage2()
               ,));
             //  meet = [
             //

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Meeting{
-  Meeting(
+class Meeting2{
+  Meeting2(
        this.eventName,
        this.from,
        this.to,

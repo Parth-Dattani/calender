@@ -5,25 +5,25 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import 'meeting_data_source.dart';
-import 'meetting.dart';
+import 'meeting_data_source2.dart';
+import 'meetting2.dart';
 
-class SyncfusionCal extends StatefulWidget {
-  const SyncfusionCal({Key? key}) : super(key: key);
+class SyncfusionCal2 extends StatefulWidget {
+  const SyncfusionCal2({Key? key}) : super(key: key);
 
   @override
-  State<SyncfusionCal> createState() => _SyncfusionCalState();
+  State<SyncfusionCal2> createState() => _SyncfusionCal2State();
 }
 
-class _SyncfusionCalState extends State<SyncfusionCal> {
+class _SyncfusionCal2State extends State<SyncfusionCal2> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
   Map<String, List> mySelectedEvent = {};
-  DateTime _focusDay = DateTime.now();
+  final DateTime _focusDay = DateTime.now();
   DateTime? _selectedDate;
-  List<Meeting> meet = <Meeting>[];
-  List<Meeting> meetings = <Meeting>[];
+  List<Meeting2> meet = <Meeting2>[];
+  List<Meeting2> meetings = <Meeting2>[];
 
   @override
   void initState() {
@@ -258,7 +258,7 @@ class _SyncfusionCalState extends State<SyncfusionCal> {
                     appointmentDisplayMode:
                         MonthAppointmentDisplayMode.indicator),
                 //dataSource: MeetingDataSource(_getDataSource()),
-                dataSource: MeetingDataSource(meet),
+                dataSource: MeetingDataSource2(meet),
               ),
             ),
           ],
@@ -284,7 +284,7 @@ class _SyncfusionCalState extends State<SyncfusionCal> {
     _selectedDate;
     print("select Date :${_selectedDate}");
     meet.add(
-      Meeting(titleController.text,
+      Meeting2(titleController.text,
           _selectedDate!,
           _selectedDate!.add(Duration(hours: 2)),
           Colors.purple, false),

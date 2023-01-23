@@ -4,15 +4,15 @@ import 'dart:math';
 import 'package:calender/utils.dart';
 import 'package:flutter/material.dart';
 
-class AddEventPage extends StatefulWidget {
+class AddEventPage2 extends StatefulWidget {
   final Event? event;
-  const AddEventPage({Key? key, this.event}) : super(key: key);
+  const AddEventPage2({Key? key, this.event}) : super(key: key);
 
   @override
-  State<AddEventPage> createState() => _AddEventPageState();
+  State<AddEventPage2> createState() => _AddEventPage2State();
 }
 
-class _AddEventPageState extends State<AddEventPage> {
+class _AddEventPage2State extends State<AddEventPage2> {
   late DateTime fromDate;
   late DateTime toDate;
   final _formKey = GlobalKey<FormState>();
