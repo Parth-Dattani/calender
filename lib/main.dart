@@ -1,12 +1,15 @@
 import 'package:calender/calender_list.dart';
 import 'package:calender/syncfusion_calender/syncfusion_cal.dart';
 import 'package:calender/table_calender/table_event_calender.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'table_calender/event_cal.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   initializeDateFormatting().then((_) {
 
   runApp(const MyApp());

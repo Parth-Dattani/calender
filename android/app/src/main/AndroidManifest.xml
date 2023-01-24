@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.calender">
+    package="com.onetech.calender">
    <application
         android:label="calender"
         android:name="${applicationName}"

@@ -1,10 +1,16 @@
 import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_social_media_signin/flutter_social_media_signin.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/calendar/v3.dart' as googleAPI;
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
+import '../model/user_model.dart';
+import '../widget/CalenderClient.dart';
+import '../widget/google_login.dart';
 import 'meeting_data_source2.dart';
 import 'meetting2.dart';
 
@@ -24,16 +30,77 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
   DateTime? _selectedDate;
   List<Meeting2> meet = <Meeting2>[];
   List<Meeting2> meetings = <Meeting2>[];
+  final auth = FirebaseAuth.instance;
+  User? user2;
+  final GoogleSignIn googleSignIn2 = GoogleSignIn();
+
 
   @override
   void initState() {
     super.initState();
-
+   // signInwithGoogle();
     _selectedDate = _focusDay;
+    // googleSignIn.onCurrentUserChanged.listen((event) {
+    //   setState(() {
+    //     user = event;
+    //   });
+    // });
+    //googleSignIn.signInSilently();
   }
+
+
+
+
+  //Library through Login
+  Future<void> signInwithGoogle() async {
+    print("Google Auth Before");
+    var googleAuth = await FlutterSocialMediaSignin().signInWithGoogle();
+    print("Google Auth $googleAuth");
+    await auth.signInWithCredential(googleAuth).whenComplete(() =>
+        sendDataFirestore(auth.currentUser!.displayName.toString(),
+            auth.currentUser!.email.toString()));
+    print("success");
+    print("authf ${auth}");
+    //await Get.toNamed(HomeScreen.pageId);
+  }
+
+  sendDataFirestore(String userName, String email) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = auth.currentUser;
+    UserModel userModel = UserModel();
+    userModel.userName = userName;
+    userModel.email = email;
+    userModel.uid = user!.uid;
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+  }
+
+  final GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      googleAPI.CalendarApi.calendarScope
+    ],
+  );
+
+
+  Future<void> signInGoogle()async{
+    try{
+      await googleSignIn.signIn();
+    }catch(e){
+      print("error $e");
+    }
+  }
+
+  //GoogleSignInAccount? user;
+
 
   CalendarController calendarController = CalendarController();
   CalendarView calenderView = CalendarView.week;
+
+  CalendarClient calendarClient = CalendarClient();
+  DateTime startTime = DateTime.now();
+  DateTime endTime = DateTime.now().add(Duration(days: 1));
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +110,19 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
         elevation: 1,
         actions: [
           IconButton(onPressed: () {
-            editEvent(0);
-          }, icon: const Icon(Icons.calendar_month))
+            //editEvent(0);
+            //signInGoogle();
+            // Authentication.signInWithGoogle(/*context: context*/);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    "user : ${auth.currentUser!.displayName.toString()}"),
+              ),
+            );
+          }, icon: const Icon(Icons.person)),
+          IconButton(onPressed: () {
+            Authentication.signOut(context: context);
+          }, icon: const Icon(Icons.logout))
         ],
       ),
       body: SafeArea(
@@ -158,7 +236,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                             },
                             child: Text("Cancel")),
                         TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (titleController.text.isEmpty &&
                                   descriptionController.text.isEmpty) {
                                 print("if ${_selectedDate}");
@@ -173,11 +251,17 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                 print("object ${titleController.text}");
                                 print("object else ${_selectedDate}");
                                 print("Focus Day ${_focusDay}");
-
+                                await calendarClient.insert(
+                                  titleController.text,
+                                  startTime,
+                                  endTime,
+                                );
                                 setState(() {
                                   // _selectedDate = _focusDay;
                                   // _selectedDate = _focusDay;
+                                  print("calleed");
 
+                                  print("callEnd");
                                   print("object2 else : ${_selectedDate}");
                                   if (mySelectedEvent[DateFormat('yyyy-MM-dd')
                                           .format(_selectedDate!)] !=
@@ -217,7 +301,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                 });
                               }
                             },
-                            child: const Text("Add Event")),
+                            child: Text("Add Event")),
                       ],
                     ),
                   );

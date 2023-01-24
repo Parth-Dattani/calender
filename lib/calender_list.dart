@@ -1,5 +1,6 @@
 import 'package:calender/calender_view/view_calender.dart';
 import 'package:calender/syncfusion_calender/syncfusion_cal.dart';
+import 'package:calender/syncfusion_calender_2/sync_screen.dart';
 import 'package:calender/syncfusion_calender_2/syncfusion_cal2.dart';
 import 'package:calender/table_calender/table_event_calender.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ style: TextButton.styleFrom(
                     ),
                     onPressed: (){
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                      const SyncfusionCal2(),));
+                      const SyncScreen(),));
                     }, child: const Text("Synfusion Calender2"))
               ],),
 
