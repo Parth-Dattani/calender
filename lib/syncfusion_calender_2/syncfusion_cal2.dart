@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../widget/CalenderClient.dart';
+import '../widget/google_login.dart';
 import 'meeting_data_source2.dart';
 import 'meetting2.dart';
 
@@ -24,6 +28,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
   DateTime? _selectedDate;
   List<Meeting2> meet = <Meeting2>[];
   List<Meeting2> meetings = <Meeting2>[];
+  final auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -35,6 +40,10 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
   CalendarController calendarController = CalendarController();
   CalendarView calenderView = CalendarView.week;
 
+  CalendarClient calendarClient = CalendarClient();
+  DateTime startTime = DateTime.now();
+  DateTime endTime = DateTime.now().add(Duration(days: 1));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,8 +52,17 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
         elevation: 1,
         actions: [
           IconButton(onPressed: () {
-            editEvent(0);
-          }, icon: const Icon(Icons.calendar_month))
+            //editEvent(0);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    "user : ${auth.currentUser!.displayName.toString()}"),
+              ),
+            );
+          }, icon: const Icon(Icons.person)),
+          IconButton(onPressed: () {
+            Authentication.signOut(context: context);
+          }, icon: const Icon(Icons.logout))
         ],
       ),
       body: SafeArea(
@@ -158,7 +176,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                             },
                             child: Text("Cancel")),
                         TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (titleController.text.isEmpty &&
                                   descriptionController.text.isEmpty) {
                                 print("if ${_selectedDate}");
@@ -174,13 +192,19 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                 print("object else ${_selectedDate}");
                                 print("Focus Day ${_focusDay}");
 
+                                await calendarClient.insert(
+                                  titleController.text,
+                                  startTime,
+                                  endTime,
+                                );
                                 setState(() {
                                   // _selectedDate = _focusDay;
                                   // _selectedDate = _focusDay;
 
+                                  print("callEnd");
                                   print("object2 else : ${_selectedDate}");
                                   if (mySelectedEvent[DateFormat('yyyy-MM-dd')
-                                          .format(_selectedDate!)] !=
+                                      .format(_selectedDate!)] !=
                                       null) {
 //addEvent();
                                     /* mySelectedEvent[DateFormat('yyyy-MM-dd').format(_selectedDate!)]?.add(
@@ -287,7 +311,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
       Meeting2(titleController.text,
           _selectedDate!,
           _selectedDate!.add(Duration(hours: 2)),
-          Colors.purple, false),
+          Colors.primaries[Random().nextInt(Colors.primaries.length)], false),
     );
   }
 
