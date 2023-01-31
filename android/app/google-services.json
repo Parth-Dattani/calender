@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "515316847387",
-    "project_id": "caltot-8c410",
-    "storage_bucket": "caltot-8c410.appspot.com"
+    "project_number": "876744779580",
+    "project_id": "calendarapi-8fef9",
+    "storage_bucket": "calendarapi-8fef9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:515316847387:android:eac71fee141f22c14cf9be",
+        "mobilesdk_app_id": "1:876744779580:android:82c1b9f587a07e3df22039",
         "android_client_info": {
           "package_name": "com.tot.calender"
         }
       },
       "oauth_client": [
         {
-          "client_id": "515316847387-p717aean9abug72p7kp2t3nq3f6afno6.apps.googleusercontent.com",
+          "client_id": "876744779580-b5jo62e9nqudm45k84atbdu2kqat64b5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAmKwhpTXHlSkwGQFeAwZ4NbeV2e2-SHEo"
+          "current_key": "AIzaSyBWv77y4rP-6iQgD3heIikyncfqyBU34lI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "515316847387-bqj2f8loug38pv1l2h1ujsdapeqmkq98.apps.googleusercontent.com",
+              "client_id": "876744779580-9jtnvt8f7dtf59arlqrlirci6bc8svd0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
