@@ -9,6 +9,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../widget/CalenderClient.dart';
 import '../widget/google_login.dart';
+import '../widget/remot_services.dart';
 import 'meeting_data_source2.dart';
 import 'meetting2.dart';
 
@@ -192,11 +193,32 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                 print("object else ${_selectedDate}");
                                 print("Focus Day ${_focusDay}");
 
-                                await calendarClient.insert(
-                                  titleController.text,
-                                  startTime,
-                                  endTime,
-                                );
+                                try{
+                                  var response = await RemoteServices.insertEvent(
+                                      "386036318987-tdo5euk4r3vbmi4tqsimcdlsvar6kr27.apps.googleusercontent.com",
+                                      titleController.text,
+                                      startTime.toLocal(),
+                                      endTime.toLocal()
+                                  );
+
+                                  if(response.statusCode == 200){
+                                    print("stat ${response.statusCode}");
+                                  }
+                                  else{
+                                    print("status not match");
+                                  }
+                                }
+                                catch(e){
+                                 print("Ex: $e");
+                                }
+
+
+                                //in Site
+                                // await calendarClient.insert(
+                                //   titleController.text,
+                                //   startTime,
+                                //   endTime,
+                                // );
                                 setState(() {
                                   // _selectedDate = _focusDay;
                                   // _selectedDate = _focusDay;

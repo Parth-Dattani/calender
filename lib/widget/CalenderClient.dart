@@ -10,7 +10,7 @@ class CalendarClient {
 
   insert(title, startTime, endTime) {
     var clientID = ClientId(
-        "386036318987lqmh6mip8jc14o8espaua7qg4ei6srvg.apps.googleusercontent.com",
+        "386036318987-tdo5euk4r3vbmi4tqsimcdlsvar6kr27.apps.googleusercontent.com",
         "");
     clientViaUserConsent(clientID, _scopes, prompt).then((AuthClient client) {
       var calendar = CalendarApi(client);

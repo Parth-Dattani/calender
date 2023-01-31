@@ -32,6 +32,8 @@ class Authentication {
         idToken: googleSignInAuthentication.idToken,
       );
 
+      print("acc$credential}");
+
       try {
         final UserCredential userCredential =
         await auth.signInWithCredential(credential);

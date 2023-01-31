@@ -64,6 +64,21 @@ style: TextButton.styleFrom(
                     }, child: const Text("Synfusion Calender2"))
               ],),
 
+              Row(
+                children: [
+                  TextButton(
+                      style: TextButton.styleFrom(
+                          fixedSize: Size.fromWidth(190),
+                          minimumSize: Size(140, 40),
+                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                      ),
+                      onPressed: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                        const SyncfusionCal2(),));
+                      }, child: const Text("Synfusion Calender2 Dev"))
+                ],
+              )
+
             ],
           ),
         ),
