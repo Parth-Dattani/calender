@@ -32,7 +32,7 @@ class Authentication {
         idToken: googleSignInAuthentication.idToken,
       );
 
-      print("acc$credential}");
+      print("acc $credential}");
 
       try {
         final UserCredential userCredential =

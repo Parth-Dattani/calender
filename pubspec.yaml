@@ -49,6 +49,9 @@ dependencies:
   googleapis_auth: ^1.3.1
   googleapis: ^10.0.0
   http: ^0.13.5
+  add_2_calendar: ^2.2.3
+  cell_calendar: ^0.7.0
+  flutter_calendar_carousel: ^2.4.2
   url_launcher: ^6.1.8
   flutter_social_media_signin:
     git: https://github.com/amin-ganja/flutter_social_media_login.git

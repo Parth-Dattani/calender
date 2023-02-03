@@ -6,15 +6,19 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CalendarClient {
-  static final _scopes = [CalendarApi.calendarScope];
+  static final _scopes = [CalendarApi.calendarScope,
+    'https://www.googleapis.com/auth/calendar',
+    'https://www.googleapis.com/auth/calendar.events',
+  ];
 
   insert(title, startTime, endTime) {
     var clientID = ClientId(
-        "386036318987-tdo5euk4r3vbmi4tqsimcdlsvar6kr27.apps.googleusercontent.com",
-        "");
+        "270962746636-n9d01lu8avmkfm5dtbqg45e26fnfkg37.apps.googleusercontent.com",);
     clientViaUserConsent(clientID, _scopes, prompt).then((AuthClient client) {
       var calendar = CalendarApi(client);
-      calendar.calendarList.list().then((value) => print("VAL________$value"));
+      calendar.calendarList.list().then((value) {
+        print("VAL________$value");
+      } );
 
       String calendarId = "primary";
       Event event = Event(); // Create object of event
@@ -23,24 +27,24 @@ class CalendarClient {
 
       EventDateTime start = EventDateTime();
       start.dateTime = startTime;
-      start.timeZone = "GMT+05:00";
+      start.timeZone = "GMT+05:30";
       event.start = start;
 
       EventDateTime end = EventDateTime();
-      end.timeZone = "GMT+05:00";
+      end.timeZone = "GMT+05:30";
       end.dateTime = endTime;
       event.end = end;
       try {
         calendar.events.insert(event, calendarId).then((value) {
           print("ADDEDDD_________________${value.status}");
           if (value.status == "confirmed") {
-            log('Event added in google calendar');
+            print('Event added in google calendar');
           } else {
-            log("Unable to add event in google calendar");
+            print("Unable to add event in google calendar");
           }
         });
       } catch (e) {
-        log('Error creating event $e');
+        print('Error creating event $e');
       }
     });
   }

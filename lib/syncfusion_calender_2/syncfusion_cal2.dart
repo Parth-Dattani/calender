@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -30,12 +31,22 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
   List<Meeting2> meet = <Meeting2>[];
   List<Meeting2> meetings = <Meeting2>[];
   final auth = FirebaseAuth.instance;
+  SharedPreferences? pref;
 
   @override
   void initState() {
     super.initState();
 
     _selectedDate = _focusDay;
+    //initPref();
+  }
+
+  initPref() async{
+    pref = await SharedPreferences.getInstance();
+    setState((){
+      mySelectedEvent = Map<String, List>.from(
+          json.decode(pref!.getString("eventTitle").toString()));
+    });
   }
 
   CalendarController calendarController = CalendarController();
@@ -43,7 +54,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
 
   CalendarClient calendarClient = CalendarClient();
   DateTime startTime = DateTime.now();
-  DateTime endTime = DateTime.now().add(Duration(days: 1));
+  DateTime endTime = DateTime.now().add(const Duration(hours: 2));
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +63,30 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
         title: const Text("Home Page"),
         elevation: 1,
         actions: [
+          IconButton(onPressed: () async {
+            //editEvent(0);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                    "Event getting"),
+              ),
+            );
+
+            try{
+              var response = await RemoteServices.getCalData();
+
+              if(response.statusCode == 200){
+                print("stat ${response.statusCode}");
+                print("cal Data ${response.body}");
+              }
+              else{
+                print("status not match");
+              }
+            }
+            catch(e){
+              print("Ex: $e");
+            }
+          }, icon: const Icon(Icons.downloading_rounded)),
           IconButton(onPressed: () {
             //editEvent(0);
             ScaffoldMessenger.of(context).showSnackBar(
@@ -193,9 +228,12 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                 print("object else ${_selectedDate}");
                                 print("Focus Day ${_focusDay}");
 
+
+
                                 try{
                                   var response = await RemoteServices.insertEvent(
-                                      "876744779580-b5jo62e9nqudm45k84atbdu2kqat64b5.apps.googleusercontent.com",
+                                      "270962746636-n9d01lu8avmkfm5dtbqg45e26fnfkg37.apps.googleusercontent.com",
+                                      "AIzaSyCxUCLPiVvNia109eNC4Nd2EYmPogjVxc0",
                                       titleController.text,
                                       startTime.toLocal(),
                                       endTime.toLocal()
@@ -213,7 +251,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                 }
 
 
-                                //in Site
+                                /*in Site*/
                                 // await calendarClient.insert(
                                 //   titleController.text,
                                 //   startTime,
@@ -255,8 +293,8 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                     ];
                                   }
                                   addEvent();
-                                  print(
-                                      "Event Added ${json.encode(mySelectedEvent)}");
+                                  pref?.setString("eventTitle", json.encode(mySelectedEvent));
+                                  print("Event Added ${json.encode(mySelectedEvent)}");
                                   titleController.clear();
                                   descriptionController.clear();
                                   Navigator.pop(context);
