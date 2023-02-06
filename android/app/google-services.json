@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:270962746636:android:8503b7e83b85ae5a99d529",
+        "mobilesdk_app_id": "1:270962746636:android:f2faa23632012a8199d529",
         "android_client_info": {
           "package_name": "com.tot.calender"
         }
@@ -20,7 +20,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDxNV0QIhYErT2gzVPW0l2d5G0-wzrORE8"
+          "current_key": "AIzaSyCSjeT3SahLSjeri8x5JxzkaVULNSFM9uI"
         }
       ],
       "services": {

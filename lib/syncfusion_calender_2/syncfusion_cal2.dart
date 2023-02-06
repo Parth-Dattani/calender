@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../model/event_model.dart';
 import '../widget/CalenderClient.dart';
 import '../widget/google_login.dart';
 import '../widget/remot_services.dart';
@@ -32,6 +33,7 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
   List<Meeting2> meetings = <Meeting2>[];
   final auth = FirebaseAuth.instance;
   SharedPreferences? pref;
+  List<EventModel> eventList  = <EventModel>[];
 
   @override
   void initState() {
@@ -73,11 +75,20 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
             );
 
             try{
-              var response = await RemoteServices.getCalData();
+              var response = await RemoteServices.getData();
 
               if(response.statusCode == 200){
-                print("stat ${response.statusCode}");
-                print("cal Data ${response.body}");
+                print("cal Data featch");
+                var jsonData = json.decode(response.body);
+                print("json data:${jsonData}");
+                eventList = EventModel.fromJson(jsonData) as List<EventModel>;
+                print("evetnt:$eventList");
+                titleController.text = eventList.first.summary!;
+                print("Summary : ${titleController.text = eventList.first.items![0].summary.toString()}");
+
+                for(var i=0; i<=response.body.length; i++){
+                  print("itm1: ${response.body}");
+                }
               }
               else{
                 print("status not match");
@@ -228,15 +239,13 @@ class _SyncfusionCal2State extends State<SyncfusionCal2> {
                                 print("object else ${_selectedDate}");
                                 print("Focus Day ${_focusDay}");
 
-
-
                                 try{
                                   var response = await RemoteServices.insertEvent(
                                       "270962746636-n9d01lu8avmkfm5dtbqg45e26fnfkg37.apps.googleusercontent.com",
                                       "AIzaSyCxUCLPiVvNia109eNC4Nd2EYmPogjVxc0",
                                       titleController.text,
-                                      startTime.toLocal(),
-                                      endTime.toLocal()
+                                      startTime,
+                                      endTime
                                   );
 
                                   if(response.statusCode == 200){

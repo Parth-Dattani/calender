@@ -20,19 +20,20 @@ class Authentication {
     // scop.add(
     //   googleAPI.CalendarApi.calendarScope,);
     print("client Id : $clientId");
-    print("client Id : $scop");
-
+    print("scope : $scop");
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
+
+      print(googleSignInAuthentication.accessToken);
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
-      print("acc $credential}");
+      print("acc $credential");
 
       try {
         final UserCredential userCredential =
